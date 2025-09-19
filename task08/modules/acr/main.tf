@@ -25,6 +25,11 @@ resource "azurerm_container_registry_task" "build" {
     repository_url = var.git_repo_url
     source_type    = "Github"
     branch         = var.git_branch
+
+    authentication {
+      token      = var.git_pat
+      token_type = "PAT" # PAT kullanıyoruz
+    }
   }
 
   # Docker adımı: context olarak repo URL + PAT

@@ -1,30 +1,39 @@
 variable "name" {
   type        = string
-  description = "Azure Redis Cache instance name (e.g., cmtr-vf06h1cc-mod8-redis)."
+  description = "The name of the Azure Redis Cache instance."
 }
 
 variable "location" {
   type        = string
-  description = "Azure region where the Redis instance will be deployed (e.g., eastus)."
+  description = "Azure region where the Redis Cache will be deployed."
 }
 
 variable "resource_group_name" {
   type        = string
-  description = "Name of the resource group that will contain the Redis and related resources."
+  description = "The name of the resource group in which the Redis Cache will be created."
 }
 
 variable "tags" {
   type        = map(string)
-  description = "Common tags to apply to all resources created by this module (e.g., { Creator = \"sumeyye_unal@epam.com\" })."
+  description = "A map of tags to apply to the Redis Cache resource."
 }
 
-variable "kv_id" {
+variable "key_vault_id" {
   type        = string
-  description = "Resource ID of the Key Vault where Redis connection details (hostname, primary key) will be stored as secrets."
+  description = "The resource ID of the Key Vault where Redis secrets will be stored."
 }
 
-variable "kv_uri" {
+variable "key_vault_name" {
   type        = string
-  description = "Vault URI of the Key Vault (e.g., https://cmtr-vf06h1cc-mod8-kv.vault.azure.net/)."
+  description = "The name of the Key Vault where Redis secrets will be stored."
 }
 
+variable "redis_hostname_secret_name" {
+  type        = string
+  description = "The name of the Key Vault secret that will store the Redis hostname."
+}
+
+variable "redis_key_secret_name" {
+  type        = string
+  description = "The name of the Key Vault secret that will store the Redis primary access key."
+}

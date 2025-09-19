@@ -7,41 +7,39 @@ resource "azurerm_container_registry" "acr" {
   tags                = var.tags
 }
 
-resource "azurerm_container_registry_task" "build_task" {
-  name                  = "${var.name}-build"
+# ✔ ACR Task (doğru şema)
+resource "azurerm_container_registry_task" "build" {
+  name                  = "${var.name}-task"
   container_registry_id = azurerm_container_registry.acr.id
+  agent_pool_name       = "Default"
 
+  # platform bir BLOK olmalı
   platform {
-    os           = "Linux"
-    architecture = "amd64"
+    os = "Linux"
   }
 
-  # Kaynak repo'dan build
-  docker_step {
-    dockerfile_path       = var.dockerfile_path           # örn: application/Dockerfile
-    context_path          = var.git_repo_url              # HTTPS repo URL
-    context_access_token  = var.git_pat
-    image_names           = ["${var.image_name}:{{.Run.ID}}", "${var.image_name}:latest"]
-  }
-
-  # Otomatik tetikleyici (GitHub/Azure Repos'tan)
+  # Git tetikleyici alanları artık source_trigger BLOĞU içinde düz alanlar
   source_trigger {
-    name           = "src"
-    source_type    = "Github"            # Azure Repos ise: "VisualStudioTeamService"
+    name           = "gitTrigger"
+    events         = ["commit"]
     repository_url = var.git_repo_url
+    source_type    = "Github"
     branch         = var.git_branch
-    events         = ["commit"]          # veya ["commit","pullrequest"]
-    enabled        = true
+  }
 
-    authentication {
-      token      = var.git_pat
-      token_type = "PAT"                 # PAT kullandığımız için zorunlu
-    }
+  # Docker adımı: context olarak repo URL + PAT
+  docker_step {
+    dockerfile_path      = "task08/application/Dockerfile"
+    image_names          = ["${var.image_name}:latest"]
+    context_path         = var.git_repo_url
+    context_access_token = var.git_pat
+  }
+
+  # ⏰ Ayrı bir *resource* yerine burada timer_trigger bloğu kullanılır
+  timer_trigger {
+    name     = "daily-build"
+    schedule = "0 3 * * *" # her gün 03:00 UTC
+    enabled  = true
   }
 }
 
-# Periyodik çalıştırma (cron)
-resource "azurerm_container_registry_task_schedule_run" "sched" {
-  container_registry_task_id = azurerm_container_registry_task.build_task.id
-  schedule                   = "*/15 * * * *"
-}

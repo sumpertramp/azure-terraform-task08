@@ -5,20 +5,26 @@ metadata:
 spec:
   replicas: 1
   selector:
-    matchLabels: { app: mod8-app }
+    matchLabels:
+      app: mod8-app
   template:
     metadata:
-      labels: { app: mod8-app }
-      annotations:
-        # SPC bağlama
-        secrets-store.csi.k8s.io/used: "true"
+      labels:
+        app: mod8-app
     spec:
+      volumes:
+        - name: kv-secrets
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "${spc_name}"
       containers:
         - name: app
-          image: "${image}"
-          imagePullPolicy: Always
+          image: ${image}
+          imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 5000
+            - containerPort: 80
           env:
             - name: CREATOR
               value: "K8S"
@@ -29,21 +35,15 @@ spec:
             - name: REDIS_URL
               valueFrom:
                 secretKeyRef:
-                  name: redis-secrets
-                  key: REDIS_URL
+                  name: ${k8s_secret_name}
+                  key: redis-hostname
             - name: REDIS_PWD
               valueFrom:
                 secretKeyRef:
-                  name: redis-secrets
-                  key: REDIS_PWD
-          readinessProbe:
-            httpGet: { path: "/", port: 5000 }
-            initialDelaySeconds: 10
-            periodSeconds: 5
-      volumes:
-        - name: kv
-          csi:
-            driver: secrets-store.csi.k8s.io
-            readOnly: true
-            volumeAttributes:
-              secretProviderClass: "kv-redis-spc"
+                  name: ${k8s_secret_name}
+                  key: redis-primary-key
+          volumeMounts:
+            - name: kv-secrets
+              mountPath: /mnt/secrets
+              readOnly: true
+

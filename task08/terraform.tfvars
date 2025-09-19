@@ -1,5 +1,5 @@
-﻿location   = "eastus"
-acr_sku    = "Basic"
-git_repo_url = "https://<your-username>@<your-git-host>/<your-org-or-user>/<your-repo>.git"
+location     = "eastus"
+acr_sku      = "Basic"
+git_repo_url = "https://github.com/sumpertramp/azure-terraform-task08.git"
 git_branch   = "main"
-# git_pat'i apply sırasında interaktif gireceksin (sensitive). Otomatide UI alanına koy.
+# git_pat konsolda sorulsun istersen buradan çıkarabilirsin

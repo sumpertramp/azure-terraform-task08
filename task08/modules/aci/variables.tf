@@ -1,65 +1,54 @@
 variable "name" {
   type        = string
-  description = "Azure Container Instance (ACI) container group adı (örn. cmtr-vf06h1cc-mod8-ci)."
+  description = "The name of the Azure Container Instance (ACI)."
 }
 
 variable "location" {
   type        = string
-  description = "ACI'nin oluşturulacağı Azure bölgesi (örn. eastus)."
+  description = "Azure region where the ACI will be deployed."
 }
 
 variable "resource_group_name" {
   type        = string
-  description = "ACI'nin yer alacağı Resource Group adı."
+  description = "The name of the resource group in which the ACI will be created."
 }
 
 variable "tags" {
   type        = map(string)
-  description = "Oluşturulan kaynağa uygulanacak ortak etiketler (örn. { Creator = \"sumeyye_unal@epam.com\" })."
+  description = "A map of tags to apply to the ACI resource."
+}
+
+variable "dns_name_label" {
+  type        = string
+  description = "The DNS name label used to create a publicly accessible FQDN for the ACI."
 }
 
 variable "image" {
   type        = string
-  description = "ACR içindeki tam imaj yolu (örn. cmtrvf06h1ccmod8cr.azurecr.io/cmtr-vf06h1cc-mod8-app:latest)."
+  description = "The full path to the container image in Azure Container Registry (ACR) (e.g., <acr_login_server>/<image_name>:latest)."
 }
 
-variable "cpu" {
-  type        = number
-  default     = 1
-  description = "Konteyner için vCPU sayısı."
-}
-
-variable "memory_gb" {
-  type        = number
-  default     = 1.5
-  description = "Konteyner belleği (GB)."
-}
-
-# ACR kimlik bilgileri (image pull için)
-variable "acr_server" {
+variable "registry_server" {
   type        = string
-  description = "ACR login server değeri (örn. cmtrvf06h1ccmod8cr.azurecr.io)."
+  description = "The login server URL of the Azure Container Registry (ACR) where the image is stored."
 }
 
-variable "acr_username" {
+variable "registry_username" {
   type        = string
-  description = "ACR yönetici kullanıcı adı (admin_enabled=true ile alınır)."
+  description = "The admin username used to authenticate to the Azure Container Registry (ACR)."
 }
 
-variable "acr_password" {
+variable "registry_password" {
   type        = string
-  sensitive   = true
-  description = "ACR yönetici parolası (gizli)."
+  description = "The admin password used to authenticate to the Azure Container Registry (ACR)."
 }
 
-# KV'den alınacak Redis secret değerleri (ACI'de secure env olarak kullanılacak)
 variable "redis_hostname" {
   type        = string
-  description = "Key Vault'taki 'redis-hostname' secret değeri (Redis host adı)."
+  description = "The Redis Cache hostname, typically stored in Azure Key Vault and injected as a secure environment variable."
 }
 
-variable "redis_primary_key" {
+variable "redis_password" {
   type        = string
-  sensitive   = true
-  description = "Key Vault'taki 'redis-primary-key' secret değeri (Redis erişim anahtarı)."
+  description = "The Redis Cache primary access key, typically stored in Azure Key Vault and injected as a secure environment variable."
 }

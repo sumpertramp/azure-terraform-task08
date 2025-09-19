@@ -1,41 +1,41 @@
-﻿variable "location" {
-  description = "Azure region"
-  type        = string
-  default     = "eastus"
-}
-
 variable "name_prefix" {
-  description = "Common name prefix/pattern"
   type        = string
   default     = "cmtr-vf06h1cc-mod8"
+  description = "Prefix used for naming all resources in this task to ensure consistent and unique naming."
 }
 
-variable "acr_sku" {
-  description = "ACR SKU (Basic/Standard/Premium)"
+variable "location" {
   type        = string
-  default     = "Basic"
-}
-
-variable "git_repo_url" {
-  description = "Git repository URL to build from (HTTPS)"
-  type        = string
-}
-
-variable "git_branch" {
-  description = "Git branch to build"
-  type        = string
-  default     = "main"
-}
-
-variable "git_pat" {
-  description = "Sensitive Git personal access token for ACR Task context_access_token"
-  type        = string
-  sensitive   = true
+  default     = "eastus"
+  description = "Azure region where all resources will be deployed."
 }
 
 variable "tags" {
-  type = map(string)
-  default = {
-    Creator = "sumeyye_unal@epam.com"
-  }
+  type        = map(string)
+  default     = { Creator = "sumeyye_unal@epam.com" }
+  description = "A map of common tags applied to all resources (e.g., Creator, environment)."
 }
+
+variable "acr_sku" {
+  type        = string
+  default     = "Basic"
+  description = "The SKU (pricing tier) for Azure Container Registry (e.g., Basic, Standard, Premium)."
+}
+
+variable "git_repo_url" {
+  type        = string
+  description = "The URL of the GitHub repository containing the application code and Dockerfile (e.g., https://github.com/<user>/<repo>.git)."
+}
+
+variable "git_branch" {
+  type        = string
+  default     = "main"
+  description = "The Git branch to use for building the Docker image via ACR Task."
+}
+
+variable "git_pat" {
+  type        = string
+  sensitive   = true
+  description = "A GitHub Personal Access Token (PAT) used by ACR Task to access the repository."
+}
+

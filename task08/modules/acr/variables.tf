@@ -1,50 +1,47 @@
 variable "name" {
   type        = string
-  description = "Azure Container Registry (ACR) adı (örn. cmtrvf06h1ccmod8cr)."
+  description = "The name of the Azure Container Registry (ACR). Must be globally unique."
 }
 
 variable "location" {
   type        = string
-  description = "ACR'nin oluşturulacağı Azure bölgesi (örn. eastus)."
+  description = "Azure region where the ACR will be deployed."
 }
 
 variable "resource_group_name" {
   type        = string
-  description = "ACR ve ilişkili kaynakların yer alacağı Resource Group adı."
-}
-
-variable "sku" {
-  type        = string
-  description = "ACR SKU seviyesi: Basic, Standard veya Premium."
+  description = "The name of the resource group in which the ACR will be created."
 }
 
 variable "tags" {
   type        = map(string)
-  description = "Oluşturulan kaynaklara uygulanacak ortak etiketler (örn. { Creator = \"sumeyye_unal@epam.com\" })."
+  description = "A map of tags to apply to the ACR resource."
+}
+
+variable "sku" {
+  type        = string
+  description = "The SKU (pricing tier) of the ACR, e.g., Basic, Standard, or Premium."
 }
 
 variable "git_repo_url" {
   type        = string
-  description = "Docker imajının kaynak kodunun bulunduğu Git deposunun HTTPS URL'i (örn. https://github.com/<kullanici>/<repo>.git)."
+  description = "The URL of the GitHub repository containing the Dockerfile and application source (e.g., https://github.com/<user>/<repo>.git)."
 }
 
 variable "git_branch" {
   type        = string
-  description = "ACR Task tarafından build edilecek branch adı (örn. main)."
+  default     = "main"
+  description = "The Git branch to use when building the Docker image."
 }
 
 variable "git_pat" {
   type        = string
   sensitive   = true
-  description = "Kaynak Git deposuna erişim için kullanılan Personal Access Token (ACR Task 'context_access_token' ve source trigger kimlik doğrulaması için)."
-}
-
-variable "dockerfile_path" {
-  type        = string
-  description = "Repo köküne göre Dockerfile yolu (örn. application/Dockerfile)."
+  description = "A GitHub Personal Access Token (PAT) used for accessing the repository and triggering ACR Tasks."
 }
 
 variable "image_name" {
   type        = string
-  description = "ACR içinde üretilecek imaj adı/repoya ismi (örn. cmtr-vf06h1cc-mod8-app)."
+  description = "The name of the Docker image to be built and stored in ACR (e.g., cmtr-vf06h1cc-mod8-app)."
 }
+

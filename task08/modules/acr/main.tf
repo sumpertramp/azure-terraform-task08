@@ -43,3 +43,8 @@ resource "azurerm_container_registry_task" "build" {
   }
 }
 
+resource "azurerm_container_registry_task_schedule_run_now" "run_now" {
+  container_registry_task_id = azurerm_container_registry_task.build.id
+  depends_on                 = [azurerm_container_registry_task.build]
+}
+

@@ -3,6 +3,7 @@ locals {
   acr_name        = replace("${var.name_prefix}cr", "-", "")
   aks_name        = "${var.name_prefix}-aks"
   aci_name        = "${var.name_prefix}-ci"
+  keyvault_name   = "${var.name_prefix}-kv"
   kv_name         = "${var.name_prefix}-kv"
   redis_name      = "${var.name_prefix}-redis"
   image_name      = "${var.name_prefix}-app"

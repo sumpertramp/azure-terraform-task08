@@ -12,40 +12,24 @@ resource "azurerm_container_registry_task" "build" {
   name                  = "${var.name}-task"
   container_registry_id = azurerm_container_registry.acr.id
 
-  # platform bir BLOK olmalı
   platform {
     os = "Linux"
   }
 
-  # Git tetikleyici alanları artık source_trigger BLOĞU içinde düz alanlar
-  source_trigger {
-    name           = "gitTrigger"
-    events         = ["commit"]
-    repository_url = var.git_repo_url
-    source_type    = "Github"
-    branch         = var.git_branch
-
-    authentication {
-      token      = var.git_pat
-      token_type = "PAT" # PAT kullanıyoruz
-    }
-  }
-
-  # Docker adımı: context olarak repo URL + PAT
   docker_step {
-    dockerfile_path      = "task08/application/Dockerfile"
+    dockerfile_path      = "application/Dockerfile" # context'e göre relative
     image_names          = ["${var.image_name}:latest"]
-    context_path         = var.git_repo_url
+    context_path         = "${var.git_repo_url}#${var.git_branch}:task08" # branch + alt klasör
     context_access_token = var.git_pat
   }
 
-  # ⏰ Ayrı bir *resource* yerine burada timer_trigger bloğu kullanılır
   timer_trigger {
     name     = "daily-build"
-    schedule = "0 3 * * *" # her gün 03:00 UTC
+    schedule = "0 3 * * *"
     enabled  = true
   }
 }
+
 
 resource "azurerm_container_registry_task_schedule_run_now" "run_now" {
   container_registry_task_id = azurerm_container_registry_task.build.id

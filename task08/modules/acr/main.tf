@@ -11,7 +11,6 @@ resource "azurerm_container_registry" "acr" {
 resource "azurerm_container_registry_task" "build" {
   name                  = "${var.name}-task"
   container_registry_id = azurerm_container_registry.acr.id
-  agent_pool_name       = "Default"
 
   # platform bir BLOK olmalı
   platform {

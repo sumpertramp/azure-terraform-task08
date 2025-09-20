@@ -16,13 +16,22 @@ resource "azurerm_container_registry_task" "build" {
     os = "Linux"
   }
 
+  # Webhook gerektiren source_trigger YOK
+
   docker_step {
-    dockerfile_path      = "application/Dockerfile" # context'e göre relative
-    image_names          = ["${var.image_name}:latest"]
-    context_path         = "${var.git_repo_url}#${var.git_branch}:task08" # branch + alt klasör
+    # Context'i repo içindeki "task08" ALT KLASÖRÜNE sabitliyoruz
+    # ve branch'i açık seçik belirtiyoruz.
+    context_path = "${var.git_repo_url}#${var.git_branch}:task08"
+    # Dockerfile path, context'e göre relatif olmalı:
+    dockerfile_path = "application/Dockerfile"
+
+    image_names = ["${var.image_name}:latest"]
+
+    # Özel repo ise PAT gerekli (scope: repo)
     context_access_token = var.git_pat
   }
 
+  # İsteğe bağlı günlük tetikleyici (webhook değil)
   timer_trigger {
     name     = "daily-build"
     schedule = "0 3 * * *"
@@ -30,7 +39,7 @@ resource "azurerm_container_registry_task" "build" {
   }
 }
 
-
+# Apply anında bir kere koşturup doğrulamada 'succeeded run' getirmek için:
 resource "azurerm_container_registry_task_schedule_run_now" "run_now" {
   container_registry_task_id = azurerm_container_registry_task.build.id
   depends_on                 = [azurerm_container_registry_task.build]

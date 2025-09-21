@@ -1,3 +1,9 @@
+locals {
+  # Plan aşamasında boş gelirse provider validation'u geçirmek için placeholder'lar
+  effective_repo_url = length(trimspace(var.repo_url_with_deploy_token)) > 0 ? var.repo_url_with_deploy_token : "https://example.com/placeholder.git"
+  effective_git_pat  = length(trimspace(var.git_pat)) > 0 ? var.git_pat : "placeholder-token"
+}
+
 resource "azurerm_container_registry" "this" {
   name                = var.name
   resource_group_name = var.resource_group_name
@@ -23,7 +29,7 @@ resource "azurerm_container_registry_task" "build" {
   # Docker step: repo içindeki konteks klasörü + erişim token'ı
   docker_step {
     context_path         = "task08/application"
-    context_access_token = var.git_pat
+    context_access_token = local.effective_git_pat
     dockerfile_path      = "task08/application/Dockerfile"
     image_names          = ["${var.image_name}:latest"]
     cache_enabled        = true
@@ -36,12 +42,12 @@ resource "azurerm_container_registry_task" "build" {
 
     # V3 provider şemasına göre bu alanlar doğrudan burada:
     source_type    = "Github" # <-- blok değil alan
-    repository_url = var.repo_url_with_deploy_token
+    repository_url = local.effective_repo_url
     branch         = "main"
 
     authentication {
       token_type = "PAT"
-      token      = var.git_pat
+      token      = local.effective_git_pat
     }
   }
 

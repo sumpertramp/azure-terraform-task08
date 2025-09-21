@@ -17,11 +17,10 @@ locals {
   # KV secret names
   redis_hostname_secret   = "redis-hostname"
   redis_primarykey_secret = "redis-primary-key"
-}
 
 
-locals {
-  effective_repo_url = coalesce(var.repo_url_with_deploy_token, var.repository_url_with_deploy_token)
-  effective_git_pat  = coalesce(var.git_pat, var.git_personal_access_token)
+  effective_repo_url = length(trimspace(var.repo_url_with_deploy_token)) > 0 ? var.repo_url_with_deploy_token : var.repository_url_with_deploy_token
+  effective_git_pat  = length(trimspace(var.git_pat)) > 0 ? var.git_pat : var.git_personal_access_token
 }
+
 

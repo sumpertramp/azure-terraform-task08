@@ -8,7 +8,7 @@ resource "azurerm_kubernetes_cluster" "this" {
 
   default_node_pool {
     name                = var.nodepool_name
-    vm_size             = var.node_size
+    vm_size             = "Standard_D2ds_v5"
     node_count          = var.node_count
     os_disk_type        = var.os_disk_type
     os_disk_size_gb     = 64

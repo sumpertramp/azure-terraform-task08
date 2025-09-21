@@ -21,12 +21,14 @@ variable "sku" {
 variable "repo_url_with_deploy_token" {
   type        = string
   description = "İmajın kaynak kodunun bulunduğu depo URL'si. Erişim için gerekli deploy token içeren tam URL (örn. https://<token>@git.example.com/org/repo.git)."
+  default     = ""
 }
 
 variable "git_pat" {
   type        = string
   sensitive   = true
   description = "Git deposuna erişim için kişisel erişim belirteci (Personal Access Token). Gizli tutulur."
+  default     = ""
 }
 
 variable "image_name" {

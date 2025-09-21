@@ -18,7 +18,6 @@ resource "azurerm_container_registry" "this" {
 resource "azurerm_container_registry_task" "build" {
   name                  = "${var.name}-task"
   container_registry_id = azurerm_container_registry.this.id
-  is_system_task        = true
   log_template          = "{{.Run.ID}}"
 
   platform {

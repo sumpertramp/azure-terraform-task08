@@ -1,34 +1,34 @@
 variable "name_prefix" {
-  type = string
+  type        = string
   description = "Base name prefix"
-  default = "cmtr-vf06h1cc-mod8"
+  default     = "cmtr-vf06h1cc-mod8"
 }
 
 
 variable "location" {
-  type = string
+  type        = string
   description = "Azure region"
-  default = "eastus"
+  default     = "eastus"
 }
 
 
 variable "acr_sku" {
-  type = string
+  type        = string
   description = "ACR SKU (Standard recommended for Tasks)"
-  default = "Standard"
+  default     = "Standard"
 }
 
 
 variable "repo_url_with_deploy_token" {
-  type = string
+  type        = string
   description = "Repository URL including deploy token, e.g. https://<user>:<token>@host/org/repo.git"
 }
 
 
 variable "git_pat" {
-  type = string
+  type        = string
   description = "Git Personal Access Token used by ACR Task to access repository"
-  sensitive = true
+  sensitive   = true
 }
 
 

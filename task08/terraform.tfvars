@@ -1,6 +1,6 @@
 # Override if needed
 location = "eastus"
-acr_sku = "Standard"
+acr_sku  = "Standard"
 
 
 # Fill these before 'terraform apply' (or pass via -var)

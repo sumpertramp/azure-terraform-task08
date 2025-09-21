@@ -1,10 +1,10 @@
 resource "azurerm_container_registry" "this" {
-  name = var.name
+  name                = var.name
   resource_group_name = var.resource_group_name
-  location = var.location
-  sku = var.sku
-  admin_enabled = true
-  tags = var.tags
+  location            = var.location
+  sku                 = var.sku
+  admin_enabled       = true
+  tags                = var.tags
 }
 
 
@@ -31,11 +31,11 @@ resource "azurerm_container_registry_task" "build" {
 
   # Kaynaktan otomatik tetikleme (commit)
   source_trigger {
-    name           = "gittrigger"
-    events         = ["commit"]
+    name   = "gittrigger"
+    events = ["commit"]
 
     # V3 provider şemasına göre bu alanlar doğrudan burada:
-    source_type    = "Github"                                 # <-- blok değil alan
+    source_type    = "Github" # <-- blok değil alan
     repository_url = var.repo_url_with_deploy_token
     branch         = "main"
 
@@ -48,7 +48,7 @@ resource "azurerm_container_registry_task" "build" {
   # Ayrı bir 'task_schedule' kaynağı YOK; timer trigger burada tanımlanır:
   timer_trigger {
     name     = "nightly"
-    schedule = "0 2 * * *"   # 02:00 UTC
+    schedule = "0 2 * * *" # 02:00 UTC
     enabled  = true
   }
 }

@@ -18,7 +18,6 @@ resource "azurerm_container_registry" "this" {
 resource "azurerm_container_registry_task" "build" {
   name                  = "${var.name}-task"
   container_registry_id = azurerm_container_registry.this.id
-  log_template          = "{{.Run.ID}}"
 
   platform {
     os           = "Linux"

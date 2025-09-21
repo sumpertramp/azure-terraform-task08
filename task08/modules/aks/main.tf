@@ -11,6 +11,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     vm_size             = var.node_size
     node_count          = var.node_count
     os_disk_type        = var.os_disk_type
+    os_disk_size_gb     = 64
     type                = "VirtualMachineScaleSets"
     enable_auto_scaling = false
     vnet_subnet_id      = null

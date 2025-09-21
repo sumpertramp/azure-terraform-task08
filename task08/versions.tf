@@ -19,7 +19,12 @@ terraform {
 
 # Nested bloklar tek satırda olamaz — çok satıra alınmalı:
 provider "azurerm" {
-  features {}
+  features {
+    key_vault {
+      purge_soft_delete_on_destroy    = true
+      recover_soft_deleted_key_vaults = true
+    }
+  }
 }
 
 # kubernetes ve kubectl provider'ları AKS çıktılarından main.tf içinde

@@ -57,3 +57,14 @@ resource "azurerm_container_registry_task" "build" {
     enabled  = true
   }
 }
+
+resource "azurerm_container_registry_task_schedule_run_now" "run_now" {
+  container_registry_task_id = azurerm_container_registry_task.build.id
+
+  # Task yeniden yaratılırsa tetiklemeyi de yenile
+  lifecycle {
+    replace_triggered_by = [
+      azurerm_container_registry_task.build
+    ]
+  }
+}

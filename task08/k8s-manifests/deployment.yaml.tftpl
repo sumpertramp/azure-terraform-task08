@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${name}
+  labels:
+    app: ${name}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ${name}
+template:
+  metadata:
+    labels:
+      app: ${name}
+  spec:
+    volumes:
+      - name: kv-secrets
+        csi:
+          driver: secrets-store.csi.k8s.io
+          eadOnly: true
+          volumeAttributes:
+          secretProviderClass: ${spc_name}
+    containers:
+      - name: ${name}
+        image: ${image}
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 8080
+        env:
+        - name: CREATOR
+          value: "K8S"
+        - name: REDIS_PORT
+          value: "6380"
+        - name: REDIS_SSL_MODE
+          value: "True"
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: ${workload_secret_name}
+              key: redis-hostname
+        - name: REDIS_PWD
+          valueFrom:
+            secretKeyRef:
+              name: ${workload_secret_name}
+              key: redis-primary-key

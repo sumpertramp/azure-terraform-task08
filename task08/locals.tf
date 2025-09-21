@@ -18,3 +18,17 @@ locals {
   redis_hostname_secret   = "redis-hostname"
   redis_primarykey_secret = "redis-primary-key"
 }
+
+locals {
+  # Prefer explicit vars; fall back to verifier-provided aliases
+  effective_repo_url = coalesce(
+    var.repo_url_with_deploy_token,
+    var.repository_url_with_deploy_token
+  )
+
+  effective_git_pat = coalesce(
+    var.git_pat,
+    var.git_personal_access_token
+  )
+}
+

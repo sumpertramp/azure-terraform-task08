@@ -37,8 +37,8 @@ module "acr" {
   resource_group_name        = azurerm_resource_group.rg.name
   location                   = azurerm_resource_group.rg.location
   sku                        = var.acr_sku
-  repo_url_with_deploy_token = var.repo_url_with_deploy_token
-  git_pat                    = var.git_pat
+  repo_url_with_deploy_token = local.effective_repo_url
+  git_pat                    = local.effective_git_pat
   image_name                 = local.image_name
   tags                       = var.tags
 }

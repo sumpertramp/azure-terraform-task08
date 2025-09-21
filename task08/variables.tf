@@ -39,3 +39,19 @@ variable "tags" {
     Creator = "sumeyye_unal@epam.com"
   }
 }
+
+# --- Aliases expected by the verifier UI ---
+
+variable "repository_url_with_deploy_token" {
+  type        = string
+  description = "Alias accepted from the verifier UI for repository URL with deploy token"
+  default     = ""
+}
+
+variable "git_personal_access_token" {
+  type        = string
+  description = "Alias accepted from the verifier UI for Git Personal Access Token"
+  sensitive   = true
+  default     = ""
+}
+

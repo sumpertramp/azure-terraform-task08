@@ -1,5 +1,6 @@
 output "aci_fqdn" {
-  value = module.aci.fqdn
+  description = "FQDN of the app exposed by Azure Container Instance."
+  value       = module.aci.fqdn
 }
 
 
